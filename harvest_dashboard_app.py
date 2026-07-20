@@ -133,6 +133,7 @@ if len(pots_by_crop) > 0:
             marker_color=[f"rgba({int(c[0]*255)},{int(c[1]*255)},{int(c[2]*255)},0.8)" for c in colors],
             text=[f"{int(v)}" for v in pots_by_crop.values],
             textposition="inside",
+            textfont=dict(size=18, color="white"),
             hovertemplate="<b>%{x}</b><br>%{y} pots<extra></extra>",
         )
     )
@@ -202,12 +203,65 @@ fig3 = go.Figure(
     )
 )
 
+# Build month bands (orange headers)
+month_to_weeks = {}
+for wb in week_order:
+    month_name = wb.split(" W")[0]
+    month_to_weeks.setdefault(month_name, []).append(wb)
+
+month_shapes = []
+month_annotations = []
+
+for month_name, weeks in month_to_weeks.items():
+    indices = [week_order.index(w) for w in weeks]
+    x_start = min(indices) - 0.5
+    x_end = max(indices) + 0.5
+    center = (x_start + x_end) / 2
+
+    month_shapes.append(dict(
+        type="rect",
+        xref="x", yref="paper",
+        x0=x_start, x1=x_end,
+        y0=1.01, y1=1.09,
+        fillcolor="#e67e22",
+        line=dict(color="#e67e22", width=0),
+        layer="above",
+    ))
+
+    month_annotations.append(dict(
+        x=center, xref="x",
+        y=1.055, yref="paper",
+        text=f"<b>{month_name}</b>",
+        showarrow=False,
+        font=dict(size=13, color="white"),
+        xanchor="center",
+        yanchor="middle",
+    ))
+
+# Month dividers
+month_dividers = []
+prev_month = None
+for i, wb in enumerate(week_order):
+    current_month = wb.split(" W")[0]
+    if prev_month is not None and current_month != prev_month:
+        month_dividers.append(dict(
+            type="line",
+            xref="x", yref="paper",
+            x0=i - 0.5, x1=i - 0.5,
+            y0=0, y1=1.0,
+            line=dict(color="#888888", width=2),
+            layer="above",
+        ))
+    prev_month = current_month
+
 fig3.update_layout(
     title="",
     yaxis_title="Crop",
     height=500,
     plot_bgcolor="white",
-    margin=dict(b=80),
+    margin=dict(b=80, t=100),
+    annotations=month_annotations,
+    shapes=month_shapes + month_dividers,
 )
 st.plotly_chart(fig3, use_container_width=True)
 
@@ -219,7 +273,7 @@ with st.expander("📋 Data Notes"):
     - **weight** — pounds (lbs)
     - **bunch** — counted bunches (herbs) — converted to ~0.5 lbs per bunch
     - **volume** — individual pots donated to community for home growing
-    - **bin** — full harvested bins (not converted to lbs if unweighed at time of logging)
+    - **bin** — full harvested bins (not converted to lbs if unweighed at time of logging). Note, there are currently 7 bins and they are not reflected in the above visualizations.
     
     **Distribution logic:**
     - If **Donation** or **Wholesale** columns are blank → recorded as **Food Pantry**
