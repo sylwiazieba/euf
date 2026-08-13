@@ -20,13 +20,13 @@ st.markdown("""
 # ── Load data ─────────────────────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_excel('harvest_tracker_euf_20260719.xlsx')
+    df = pd.read_excel('harvest_tracker_euf_20260812.xlsx')
     return df
 
 try:
     df = load_data()
 except FileNotFoundError:
-    st.error("❌ Data file not found. Please ensure `harvest_tracker_euf_20260719.xlsx` is in the same directory.")
+    st.error("❌ Data file not found. Please ensure `harvest_tracker_euf_20260812.xlsx` is in the same directory.")
     st.stop()
 
 # ── Data cleaning ─────────────────────────────────────────────────────────────
@@ -110,7 +110,7 @@ fig1.update_layout(
 )
 fig1.update_yaxes(range=[0, totals.max() * 1.1])
 
-st.plotly_chart(fig1, use_container_width=True)
+st.plotly_chart(fig1, width="stretch")
 
 # ── Chart 2: Pots Distributed ────────────────────────────────────────────────
 st.subheader("🪴 Pots Distributed by Crop")
@@ -145,7 +145,7 @@ if len(pots_by_crop) > 0:
         margin=dict(b=100),
         showlegend=False,
     )
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width="stretch")
 else:
     st.info("No pot distributions recorded yet.")
 
@@ -163,7 +163,7 @@ def week_of_month(day):
 
 data_cal["WeekOfMonth"] = data_cal["Harvest Date"].dt.day.apply(week_of_month)
 
-month_abbr = {4:"Apr", 5:"May", 6:"Jun", 7:"Jul"}
+month_abbr = {4:"Apr", 5:"May", 6:"Jun", 7:"Jul", 8:"Aug"}
 data_cal["MonthName"] = data_cal["Month"].map(month_abbr)
 data_cal["WeekBucket"] = data_cal["MonthName"] + " W" + data_cal["WeekOfMonth"].astype(str)
 
@@ -263,7 +263,7 @@ fig3.update_layout(
     annotations=month_annotations,
     shapes=month_shapes + month_dividers,
 )
-st.plotly_chart(fig3, use_container_width=True)
+st.plotly_chart(fig3, width="stretch")
 
 # ── Data notes ────────────────────────────────────────────────────────────────
 st.markdown("---")
@@ -279,6 +279,6 @@ with st.expander("📋 Data Notes"):
     - If **Donation** or **Wholesale** columns are blank → recorded as **Food Pantry**
     - Otherwise recorded by organization name
     
-    **Data source:** `harvest_tracker_euf_20260719.xlsx`  
-    **Last updated:** July 19, 2026
+    **Data source:** `harvest_tracker_euf_20260812.xlsx`
+    **Last updated:** August 12, 2026
     """)
