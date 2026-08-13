@@ -28,9 +28,7 @@ wheels/
 *.ipynb
 
 # Data files (keep local)
-*.xlsx
 *.xls
-*.csv
 
 # IDE
 .vscode/
