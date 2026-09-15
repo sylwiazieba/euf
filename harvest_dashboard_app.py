@@ -280,5 +280,5 @@ with st.expander("📋 Data Notes"):
     - Otherwise recorded by organization name
     
     **Data source:** `harvest_tracker_euf_20260812.xlsx`
-    **Last updated:** August 12, 2026
+    **Last updated:** August 14, 2026
     """)
