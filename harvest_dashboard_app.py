@@ -4,6 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -18,15 +19,17 @@ st.markdown("""
 """)
 
 # ── Load data ─────────────────────────────────────────────────────────────────
+DATA_FILE = Path(__file__).with_name('harvest_tracker_euf_20260812.xlsx')
+
 @st.cache_data
-def load_data():
-    df = pd.read_excel('harvest_tracker_euf_20260812.xlsx')
+def load_data(file_path, modified_time):
+    df = pd.read_excel(file_path)
     return df
 
 try:
-    df = load_data()
+    df = load_data(str(DATA_FILE), DATA_FILE.stat().st_mtime_ns)
 except FileNotFoundError:
-    st.error("❌ Data file not found. Please ensure `harvest_tracker_euf_20260812.xlsx` is in the same directory.")
+    st.error(f"❌ Data file not found. Please ensure `{DATA_FILE.name}` is in the same directory.")
     st.stop()
 
 # ── Data cleaning ─────────────────────────────────────────────────────────────
