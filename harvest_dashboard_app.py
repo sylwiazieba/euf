@@ -167,7 +167,10 @@ def week_of_month(day):
 
 data_cal["WeekOfMonth"] = data_cal["Harvest Date"].dt.day.apply(week_of_month)
 
-month_abbr = {4:"Apr", 5:"May", 6:"Jun", 7:"Jul", 8:"Aug"}
+month_abbr = {
+    1:"Jan", 2:"Feb", 3:"Mar", 4:"Apr", 5:"May", 6:"Jun",
+    7:"Jul", 8:"Aug", 9:"Sep", 10:"Oct", 11:"Nov", 12:"Dec",
+}
 data_cal["MonthName"] = data_cal["Month"].map(month_abbr)
 data_cal["WeekBucket"] = data_cal["MonthName"] + " W" + data_cal["WeekOfMonth"].astype(str)
 
