@@ -12,14 +12,15 @@ st.set_page_config(page_title="EUF — Harvest Dashboard", layout="wide")
 
 st.title("🌱 EUF — 2026 Harvest Dashboard")
 st.markdown("""
-**Data source:** Harvest tracker (updated weekly)  
+**Data source:** Harvest tracker  
+**Data as of:** September 30, 2026  
 **Purpose:** Track and visualize harvest records across crop types, unit types, and distribution channels to support grant reporting and farm operations.
 
 ---
 """)
 
 # ── Load data ─────────────────────────────────────────────────────────────────
-DATA_FILE = Path(__file__).with_name('harvest_tracker_euf_20260812.xlsx')
+DATA_FILE = Path(__file__).with_name('harvest_tracker_euf_20260930.xlsx')
 
 @st.cache_data
 def load_data(file_path, modified_time):
@@ -282,6 +283,6 @@ with st.expander("📋 Data Notes"):
     - If **Donation** or **Wholesale** columns are blank → recorded as **Food Pantry**
     - Otherwise recorded by organization name
     
-    **Data source:** `harvest_tracker_euf_20260812.xlsx`
-    **Last updated:** August 14, 2026
+    **Data source:** `harvest_tracker_euf_20260930.xlsx`
+    **Data as of:** September 30, 2026
     """)
